@@ -1,0 +1,38 @@
+MAINTAINER PALOIT-NODE-NPM Docker Maintainers "smoulhac@palo-it.com"
+
+ARG NPM_VERSION
+
+ENV npm_install=${NPM_VERSION}
+
+USER root
+
+ENV NPM_DEPS \
+		autoconf \
+		wget \
+		gcc \
+		make
+
+RUN set -xe \
+	&& buildDeps=" \
+		$NPM_DEPS \
+        ca-certificates \
+	" \
+    && apt-get update && apt-get install --no-install-recommends --no-install-suggests -y $buildDeps \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN wget https://github.com/npm/npm/archive/v${npm_install}.tar.gz \
+    && tar xvzf v${npm_install}.tar.gz \
+    && cd npm-${npm_install} \
+    && ./configure \
+    && make \
+    && make install \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false $buildDeps
+
+COPY ./npm/docker-entrypoint /usr/local/bin/docker-entrypoint
+
+RUN cd ../ \
+    && rm -rf npm-${npm_install}/ \
+
+ENTRYPOINT ["docker-entrypoint"]
+
+CMD ["--help"]
