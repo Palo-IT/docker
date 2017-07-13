@@ -1,0 +1,14 @@
+#!/bin/bash
+
+DOCKER_VERSION=${1}
+TAG_NAME=${2}
+LANG=${3}
+TIMEZONE=${4}
+
+cp Dockerfile.dist Dockerfile
+
+sed -i "s|%DOCKER_IMAGE_BASE%|${DOCKER_VERSION}|g" Dockerfile
+sed -n -i -e '/#BUILD_PROCESS#/r docker_process.txt' -e 1x -e '2,${x;p}' -e '${x;p}' Dockerfile
+
+docker build -t $TAG_NAME --build-arg "LANG=$LANG" --build-arg "TIMEZONE=$TIMEZONE" .
+rm Dockerfile

@@ -1,0 +1,75 @@
+MAINTAINER PALOIT-NGINX Docker Maintainers "smoulhac@palo-it.com"
+
+ARG NGINX_VERSION
+ARG NAXSI_VERSION
+
+ENV NGINX_VERSION ${NGINX_VERSION}
+ENV NAXSI_VERSION ${NAXSI_VERSION}
+ENV NGINX_DEFAULT_WEB_DIR "/usr/share/nginx/html"
+ENV NGINX_WORKDIR "/usr/local/nginx"
+
+# persistent / runtime deps
+ENV NGINX_DEPS \
+		autoconf \
+		wget \
+		file \
+		g++ \
+		gcc \
+		libc-dev \
+		make \
+		pkg-config \
+		re2c
+
+RUN set -xe \
+	&& buildDeps=" \
+		$NGINX_DEPS \
+        ca-certificates \
+        openssl \
+        libssl-dev \
+        libperl-dev \
+        libpcre3-dev \
+        libxslt-dev \
+        zlib1g-dev \
+        gzip \
+        libgd2-dev \
+        libgeoip-dev \
+        gettext-base \
+	" \
+    && apt-get update && apt-get install --no-install-recommends --no-install-suggests -y $buildDeps \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz \
+    && wget https://github.com/nbs-system/naxsi/archive/${NAXSI_VERSION}.tar.gz \
+    && tar xvzf nginx-${NGINX_VERSION}.tar.gz \
+    && tar xvzf ${NAXSI_VERSION}.tar.gz \
+    && mkdir /var/lib/nginx \
+    && cd nginx-${NGINX_VERSION}/ \
+    && ./configure --conf-path=/etc/nginx/nginx.conf --add-module=../naxsi-${NAXSI_VERSION}/naxsi_src/ \
+        --error-log-path=/var/log/nginx/error.log --http-client-body-temp-path=/var/lib/nginx/body \
+        --http-fastcgi-temp-path=/var/lib/nginx/fastcgi --http-log-path=/var/log/nginx/access.log \
+        --http-proxy-temp-path=/var/lib/nginx/proxy --lock-path=/var/lock/nginx.lock \
+        --pid-path=/var/run/nginx.pid --with-http_ssl_module --with-http_geoip_module \
+        --with-http_xslt_module --with-http_image_filter_module \
+        --without-mail_pop3_module --without-mail_smtp_module \
+        --without-mail_imap_module --without-http_uwsgi_module \
+        --without-http_scgi_module --with-ipv6 --prefix=/usr \
+    && make \
+    && make install \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false $buildDeps
+
+RUN cd ../ \
+    && rm -rf nginx-${NGINX_VERSION}/ \
+    && rm -rf naxsi-${NAXSI_VERSION}/
+
+# forward request and error logs to docker log collector
+RUN ln -sf /dev/stdout /var/log/nginx/access.log \
+	&& ln -sf /dev/stderr /var/log/nginx/error.log
+
+COPY ./base/index.html $NGINX_DEFAULT_WEB_DIR/index.html
+
+COPY ./base/nginx-foreground /usr/local/bin/
+WORKDIR $NGINX_WORKDIR
+
+STOPSIGNAL SIGTERM
+
+CMD ["nginx-foreground"]

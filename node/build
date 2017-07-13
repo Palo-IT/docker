@@ -1,0 +1,33 @@
+#!/bin/bash
+
+TYPE=${1}
+DOCKER_VERSION=${2}
+TAG_NAME=${3}
+NODE_VERSION=${4}
+NODE_GPG_KEYS=${5}
+NPM_VERSION=${4}
+YARN_VERSION=${4}
+
+if [ -n "$TYPE" ]; then
+cp Dockerfile.dist Dockerfile
+sed -i "s|%DOCKER_IMAGE_BASE%|${DOCKER_VERSION}|g" Dockerfile
+
+    case "$TYPE" in
+        "base")
+            sed -n -i -e '/#BUILD_PROCESS#/r base/docker_process.txt' -e 1x -e '2,${x;p}' -e '${x;p}' Dockerfile
+            docker build -t $TAG_NAME --build-arg "NODE_VERSION=$NODE_VERSION" --build-arg "NODE_GPG_KEYS=$NODE_GPG_KEYS" .
+        ;;
+        "npm")
+            sed -n -i -e '/#BUILD_PROCESS#/r npm/docker_process.txt' -e 1x -e '2,${x;p}' -e '${x;p}' Dockerfile
+            docker build -t $TAG_NAME --build-arg NPM_VERSION="$NPM_VERSION" .
+        ;;
+        "yarn")
+            sed -n -i -e '/#BUILD_PROCESS#/r yarn/docker_process.txt' -e 1x -e '2,${x;p}' -e '${x;p}' Dockerfile
+            docker build -t $TAG_NAME --build-arg YARN_VERSION="$YARN_VERSION" .
+        ;;
+    esac
+
+    rm Dockerfile
+else
+    echo 'No type identify'
+fi

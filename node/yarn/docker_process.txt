@@ -1,0 +1,17 @@
+MAINTAINER PALOIT-NODE-YARN Docker Maintainers "smoulhac@palo-it.com"
+
+ARG YARN_VERSION
+
+USER root
+
+RUN curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version ${YARN_VERSION} \
+    && chown -R node:node $HOME/.yarn \
+    && mv $HOME/.yarn /home/node/.yarn \
+    && ln -s /home/node/.yarn/bin/* /usr/local/bin \
+    && chmod -R 777 /usr/local/bin
+
+COPY ./yarn/docker-entrypoint /usr/local/bin/docker-entrypoint
+
+ENTRYPOINT ["docker-entrypoint"]
+
+CMD ["--help"]

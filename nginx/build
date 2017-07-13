@@ -1,0 +1,29 @@
+#!/bin/bash
+
+TYPE=${1}
+DOCKER_VERSION=${2}
+TAG_NAME=${3}
+NGINX_VERSION=${4}
+NGINX_KEY=${5}
+NJS_VERSION=${6}
+NAXSI_VERSION=${5}
+
+if [ -n "$TYPE" ]; then
+cp Dockerfile.dist Dockerfile
+sed -i "s|%DOCKER_IMAGE_BASE%|${DOCKER_VERSION}|g" Dockerfile
+
+    case "$TYPE" in
+        "base")
+            sed -n -i -e '/#BUILD_PROCESS#/r base/docker_process.txt' -e 1x -e '2,${x;p}' -e '${x;p}' Dockerfile
+            docker build -t $TAG_NAME --build-arg "NGINX_VERSION=$NGINX_VERSION" --build-arg "NGINX_KEY=$NGINX_KEY" --build-arg "NJS_VERSION=$NJS_VERSION" .
+        ;;
+        "naxsi")
+            sed -n -i -e '/#BUILD_PROCESS#/r naxsi/docker_process.txt' -e 1x -e '2,${x;p}' -e '${x;p}' Dockerfile
+            docker build -t $TAG_NAME --build-arg "NGINX_VERSION=$NGINX_VERSION" --build-arg "NAXSI_VERSION=$NAXSI_VERSION" .
+        ;;
+    esac
+
+    rm Dockerfile
+else
+    echo 'No type identify'
+fi

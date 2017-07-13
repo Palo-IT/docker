@@ -1,0 +1,11 @@
+#!/bin/bash
+
+TAG_VERSION=$1
+DOCKER_CONNECT=$2
+DOCKER_SERVER=$3
+
+if [ -n "$DOCKER_CONNECT" ] && [ "$DOCKER_CONNECT" == true ]; then
+    docker login $DOCKER_SERVER
+fi
+
+docker push $TAG_VERSION

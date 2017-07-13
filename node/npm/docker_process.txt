@@ -1,0 +1,17 @@
+MAINTAINER PALOIT-NODE-NPM Docker Maintainers "smoulhac@palo-it.com"
+
+ARG NPM_VERSION
+
+ENV npm_install=${NPM_VERSION}
+
+USER root
+
+RUN curl -L https://www.npmjs.com/install.sh > install.sh \
+    && chmod 755 install.sh \
+    && ./install.sh && rm install.sh
+
+COPY ./npm/docker-entrypoint /usr/local/bin/docker-entrypoint
+
+ENTRYPOINT ["docker-entrypoint"]
+
+CMD ["--help"]
