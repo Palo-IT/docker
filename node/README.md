@@ -43,5 +43,5 @@ docker pull paloit/node-npm:4.6.1-1.0
 - version: 0.27.5
 
 ./build yarn paloit/node:8.1.4 paloit/node-yarn:0.27.5-1.0 0.27.5
-./push node-yarn:0.27.5-1.0 true (docker hub repository)
+./push paloit/node-yarn:0.27.5-1.0 true (docker hub repository)
 docker pull paloit/node-yarn:0.27.5-1.0
