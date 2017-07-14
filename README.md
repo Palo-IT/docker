@@ -1,7 +1,11 @@
 DOCKER
 ======
 
-**Functionality**
+This project give you the possibility to create base image for your application.
+You can build and push on the paloIT 's docker registry.
+The idea is to create template from each system and shared with the paloIT community. You can version each image.
+
+**FUNCTIONALITY**
 
 - docker images
 - docker rmi {id or image name}
@@ -16,15 +20,14 @@ DOCKER
 - docker rmi $(docker images | grep "^<none>" | awk "{print $3}") (rm all untagged images)
 - docker rmi $(docker images -a --filter=dangling=true -q) (clean all dangling images)
 
-COMMAND IN SHELL TO TEST CONTAINER
-==================================
+**COMMAND IN SHELL TO TEST CONTAINER**
+
 RUNNING_CONTAINER=$(docker inspect --format="{{.State.Running}}" YOUR_CONTAINER_NAME 2> /dev/null)
 if [ "$RUNNING_CONTAINER" == "true" ]; then
   .....
 fi
 
-COMMAND CLEAN RAM
-=================
+**COMMAND CLEAN RAM**
 
 - use memory in real time
   - watch -n 1 free -m
