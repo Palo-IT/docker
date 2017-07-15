@@ -36,3 +36,12 @@ fi
 - clean memory not used
   - sudo sysctl -w vm.drop_caches=3
   - sudo sync && echo 3 | sudo tee /proc/sys/vm/drop_caches
+  
+**SED COMMAND ON MAC**
+  
+Use GNU SED from brew
+  
+  - install brew: /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  - install gsed: brew install gnu-sed --with-default-names
+  - uninstall gsed: brew uninstall gnu-sed
+  
