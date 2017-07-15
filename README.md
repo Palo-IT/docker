@@ -37,6 +37,44 @@ fi
   - sudo sysctl -w vm.drop_caches=3
   - sudo sync && echo 3 | sudo tee /proc/sys/vm/drop_caches
   
+**DOCKER BASH COMPLETION**
+
+See page https://docs.docker.com/compose/completion/
+
+  - **on linux:** 
+  
+        curl -L https://raw.githubusercontent.com/docker/docker-ce/master/components/cli/contrib/completion/bash/docker > /etc/bash_completion.d/docker
+        curl -L https://raw.githubusercontent.com/docker/compose/master/contrib/completion/bash/docker-compose > /etc/bash_completion.d/docker-compose
+      
+  - **on mac:**
+  
+    **BREW**
+    
+    brew install bash-completion
+    
+    edit ~/.bash_profile or ~/.profile:
+       
+        if [ -f $(brew --prefix)/etc/bash_completion ]; then
+        . $(brew --prefix)/etc/bash_completion
+        fi
+        
+    **MACPORTS**
+        
+     sudo port install bash-completion
+        
+     edit ~/.bash_profile or ~/.profile:
+     
+        if [ -f /opt/local/etc/profile.d/bash_completion.sh ]; then
+            . /opt/local/etc/profile.d/bash_completion.sh
+        fi
+    
+    **ADD COMPLETION FILE**
+    
+        curl -L https://raw.githubusercontent.com/docker/docker-ce/master/components/cli/contrib/completion/bash/docker > `brew --prefix`/etc/bash_completion.d/docker   
+        curl -L https://raw.githubusercontent.com/docker/compose/master/contrib/completion/bash/docker-compose >`brew --prefix`/etc/bash_completion.d/docker-compose
+     
+     Open a new terminal or make source ~/.bash_profile or ~/.profile
+  
 **SED COMMAND ON MAC**
   
 Use GNU SED from brew
