@@ -39,7 +39,12 @@ fi
   
 **DOCKER BASH COMPLETION**
 
-See page https://docs.docker.com/compose/completion/
+  **See pages:**
+  
+  https://docs.docker.com/machine/completion/
+ 
+  https://docs.docker.com/compose/completion/
+ 
 
   - **on linux:** 
   
