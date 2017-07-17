@@ -1,0 +1,26 @@
+#!/bin/bash
+
+TYPE=${1}
+DOCKER_VERSION=${2}
+TAG_NAME=${3}
+AA_VERSION=${4}
+
+if [ -n "$TYPE" ]; then
+cp Dockerfile.dist Dockerfile
+sed -i "s|%DOCKER_IMAGE_BASE%|${DOCKER_VERSION}|g" Dockerfile
+
+    case "$TYPE" in
+        "base")
+            sed -n -i -e '/#BUILD_PROCESS#/r base/docker_process.txt' -e 1x -e '2,${x;p}' -e '${x;p}' Dockerfile
+            docker build -t $TAG_NAME --build-arg "AA_VERSION=$AA_VERSION" .
+        ;;
+        "data")
+            sed -n -i -e '/#BUILD_PROCESS#/r data/docker_process.txt' -e 1x -e '2,${x;p}' -e '${x;p}' Dockerfile
+            docker build -t $TAG_NAME .
+        ;;
+    esac
+
+    rm Dockerfile
+else
+    echo 'No type identify'
+fi

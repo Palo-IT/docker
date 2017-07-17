@@ -1,0 +1,33 @@
+MAINTAINER PALOIT-ANACONDA Docker Maintainers "smoulhac@palo-it.com"
+
+ARG AA_VERSION
+
+ENV AA_VERSION ${AA_VERSION}
+
+RUN set -xe \
+	&& buildDeps=" \
+        wget \
+        gcc \
+        g++ \
+        openssl \
+        bzip2 \
+        ca-certificates \
+        libglib2.0-0 \
+        libxext6 \
+        libsm6 \
+        libxrender1 \
+        git \
+        mercurial \
+        subversion \
+	" \
+    && apt-get update && apt-get install --no-install-recommends --no-install-suggests -y $buildDeps \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN echo 'export PATH=/opt/anaconda/bin:$PATH' > /etc/profile.d/anaconda.sh \
+    && wget https://repo.continuum.io/archive/Anaconda${AA_VERSION}.sh \
+    && /bin/bash Anaconda${AA_VERSION}.sh -b -p /opt/anaconda \
+    && rm Anaconda${AA_VERSION}.sh
+
+ENV PATH /opt/anaconda/bin:$PATH
+
+CMD [ "/bin/bash" ]

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+DOCKER_VERSION=${1}
+TAG_NAME=${2}
+GOSU_VERSION=${3}
+PG_KEY=${4}
+PG_MAJOR=${5}
+PG_VERSION=${6}
+
+cp Dockerfile.dist Dockerfile
+
+sed -i "s|%DOCKER_IMAGE_BASE%|${DOCKER_VERSION}|g" Dockerfile
+sed -n -i -e '/#BUILD_PROCESS#/r docker_process.txt' -e 1x -e '2,${x;p}' -e '${x;p}' Dockerfile
+
+docker build -t $TAG_NAME --build-arg "GOSU_VERSION=$GOSU_VERSION" --build-arg "PG_KEY=$PG_KEY" --build-arg "PG_MAJOR=$PG_MAJOR" --build-arg "PG_VERSION=$PG_VERSION" .
+rm Dockerfile

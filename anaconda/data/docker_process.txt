@@ -1,0 +1,6 @@
+MAINTAINER PALOIT-ANACONDA-DATA Docker Maintainers "smoulhac@palo-it.com"
+
+COPY ./data/requirements.txt /tmp/requirements.txt
+
+RUN pip install -r /tmp/requirements.txt \
+    && rm /tmp/requirements.txt
