@@ -1,0 +1,31 @@
+#!/bin/bash
+
+TYPE=${1}
+DOCKER_VERSION=${2}
+TAG_NAME=${3}
+LANG=${4}
+TIMEZONE=${5}
+OS_VERSION=${4}
+CUDA_BASE=${5}
+CUDA_VERSION=${6}
+CUDA_CUBLAS=${7}
+
+if [ -n "$TYPE" ]; then
+cp Dockerfile.dist Dockerfile
+sed -i "s|%DOCKER_IMAGE_BASE%|${DOCKER_VERSION}|g" Dockerfile
+
+    case "$TYPE" in
+        "base")
+            sed -n -i -e '/#BUILD_PROCESS#/r base/docker_process.txt' -e 1x -e '2,${x;p}' -e '${x;p}' Dockerfile
+            docker build -t $TAG_NAME --build-arg "LANG=$LANG" --build-arg "TIMEZONE=$TIMEZONE" .
+        ;;
+        "nvidia")
+            sed -n -i -e '/#BUILD_PROCESS#/r nvidia/docker_process.txt' -e 1x -e '2,${x;p}' -e '${x;p}' Dockerfile
+            docker build -t $TAG_NAME --build-arg "OS_VERSION=$OS_VERSION" --build-arg "CUDA_BASE=$CUDA_BASE" --build-arg "CUDA_VERSION=$CUDA_VERSION" --build-arg "CUDA_CUBLAS=$CUDA_CUBLAS" .
+        ;;
+    esac
+
+    rm Dockerfile
+else
+    echo 'No type identify'
+fi

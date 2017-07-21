@@ -1,0 +1,11 @@
+MAINTAINER PALOIT-DEBIAN Docker Maintainers "smoulhac@palo-it.com"
+
+ARG LANG
+ARG TIMEZONE
+
+# Default file.encoding
+ENV LANG ${LANG}
+
+ENV TIMEZONE ${TIMEZONE}
+
+RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} > /etc/timezone

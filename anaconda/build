@@ -18,6 +18,10 @@ sed -i "s|%DOCKER_IMAGE_BASE%|${DOCKER_VERSION}|g" Dockerfile
             sed -n -i -e '/#BUILD_PROCESS#/r data/docker_process.txt' -e 1x -e '2,${x;p}' -e '${x;p}' Dockerfile
             docker build -t $TAG_NAME .
         ;;
+        "learning")
+            sed -n -i -e '/#BUILD_PROCESS#/r learning/docker_process.txt' -e 1x -e '2,${x;p}' -e '${x;p}' Dockerfile
+            docker build -t $TAG_NAME .
+        ;;
     esac
 
     rm Dockerfile
