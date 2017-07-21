@@ -53,10 +53,10 @@ ANACONDA VERSION
         ./push paloit/anaconda-nvidia-fr:2-4.4.0 true (docker hub repository)
         docker pull paloit/anaconda-nvidia-fr:2-4.4.0        
         
-**ANACONDA-LEARNING-VERSION 2-1.0.0**
+**ANACONDA-NVIDIA-LEARNING-VERSION 2-1.0.0**
 
 - DOCKER VERSION: paloit/anaconda-nvidia-fr:2-4.4.0
-- TAG NAME: paloit/anaconda-learning:2-1.0.0
+- TAG NAME: paloit/anaconda-nvidia-learning:2-1.0.0
 - AA VERSION: 2-4.4.0
 - PACKAGE:
 
@@ -67,10 +67,9 @@ ANACONDA VERSION
         - psycopg2
         - theano
         - keras
-        - cudnn
 
 - COMMANDS:
 
-        ./build learning paloit/anaconda-nvidia-fr:2-4.4.0 paloit/anaconda-learning:2-1.0.0
-        ./push paloit/anaconda-learning:2-1.0.0 true (docker hub repository)
-        docker pull paloit/anaconda-learning:2-1.0.0
+        ./build learning paloit/anaconda-nvidia-fr:2-4.4.0 paloit/anaconda-nvidia-learning:2-1.0.0
+        ./push paloit/anaconda-nvidia-learning:2-1.0.0 true (docker hub repository)
+        docker pull paloit/anaconda-nvidia-learning:2-1.0.0
