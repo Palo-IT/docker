@@ -12,6 +12,34 @@ ENV CUDA_CUBLAS ${CUDA_CUBLAS}
 
 LABEL com.nvidia.volumes.needed="nvidia_driver"
 
+RUN set -xe \
+	&& buildDeps=" \
+        software-properties-common \
+        python-software-properties \
+	" \
+    && apt-get update && apt-get install --no-install-recommends --no-install-suggests -y $buildDeps \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update -y && \
+apt-get install -y expect && \
+printf "\
+set timeout -1\n\
+spawn apt-get install -y keyboard-configuration\n\
+expect {\n\
+    \"\\\\\\\\\[More\\\\\\\\\]\" { send \"\\\n\"; exp_continue; }\n\
+    \"Country of origin for the keyboard: \" { send \"36\\\n\"; }\n\
+}\n\
+expect {\n\
+    \"\\\\\\\\\[More\\\\\\\\\]\" { send \"\\\n\"; exp_continue; }\n\
+    \"Keyboard layout: \" { send \"1\\\n\" }\n\
+}\n\
+expect eof\n\
+" | expect
+
+RUN add-apt-repository ppa:graphics-drivers/ppa \
+    && apt-get update \
+    && apt-get install -y -f nvidia-384
+
 RUN NVIDIA_GPGKEY_SUM=d1be581509378368edeec8c1eb2958702feedf3bc3d17011adbf24efacce4ab5 && \
     NVIDIA_GPGKEY_FPR=ae09fe4bbd223a84b2ccfce3f60f4b3d7fa2af80 && \
     apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu${OS_VERSION}/x86_64/7fa2af80.pub && \
