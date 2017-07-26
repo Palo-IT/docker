@@ -35,6 +35,7 @@ ANACONDA VERSION
         - gensim
         - elasticsearch
         - psycopg2
+        - keras
 
 - COMMANDS:
 
