@@ -4,3 +4,6 @@ gensim
 elasticsearch
 pika
 psycopg2
+tensorflow
+pdf2text
+langdetect

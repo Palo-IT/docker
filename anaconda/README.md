@@ -38,6 +38,9 @@ ANACONDA VERSION
         - psycopg2
         - theano
         - keras
+        - tensorflow
+        - pdf2text
+        - langdetect
 
 - COMMANDS:
 
