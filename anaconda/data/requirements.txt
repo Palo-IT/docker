@@ -2,4 +2,5 @@ ZEO
 ZODB
 gensim
 elasticsearch
+pika
 psycopg2

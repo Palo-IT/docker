@@ -34,7 +34,9 @@ ANACONDA VERSION
         - ZODB
         - gensim
         - elasticsearch
+        - pika
         - psycopg2
+        - theano
         - keras
 
 - COMMANDS:
