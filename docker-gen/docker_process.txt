@@ -1,0 +1,14 @@
+MAINTAINER PALOIT-DOCKER-GEN Docker Maintainers "smoulhac@palo-it.com" (from Jason Wilder <mail@jasonwilder.com>)
+
+ARG DOCKER_GEN_VERSION
+
+RUN apt-get update \
+    && apt-get -y install openssl wget
+
+ENV VERSION ${DOCKER_GEN_VERSION}
+ENV DOWNLOAD_URL https://github.com/jwilder/docker-gen/releases/download/$VERSION/docker-gen-linux-amd64-$VERSION.tar.gz
+ENV DOCKER_HOST unix:///tmp/docker.sock
+
+RUN wget -qO- $DOWNLOAD_URL | tar xvz -C /usr/local/bin
+
+ENTRYPOINT ["/usr/local/bin/docker-gen"]
