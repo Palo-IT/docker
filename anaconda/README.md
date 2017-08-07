@@ -41,6 +41,7 @@ ANACONDA VERSION
         - tensorflow
         - pdf2text
         - langdetect
+        - pattern
 
 - COMMANDS:
 

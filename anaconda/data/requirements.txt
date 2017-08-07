@@ -7,3 +7,4 @@ psycopg2
 tensorflow
 pdf2text
 langdetect
+pattern
