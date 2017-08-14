@@ -11,6 +11,8 @@ RUN conda install theano \
             device = cpu \
             floatX = float32" > ~/.theanorc
 
+RUN conda install -c conda-forge tensorflow
+
 # install and configure keras
 RUN pip install keras \
     && mkdir ~/.keras \
@@ -18,5 +20,5 @@ RUN pip install keras \
     "image_dim_ordering": "th", \
     "epsilon": 1e-07, \
     "floatx": "float32", \
-    "backend": "theano" \
+    "backend": "tensorflow" \
     }' > ~/.keras/keras.json
