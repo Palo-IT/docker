@@ -9,36 +9,7 @@ ENV OS_VERSION ${OS_VERSION}
 ENV CUDA_BASE ${CUDA_BASE}
 ENV CUDA_VERSION ${CUDA_VERSION}
 ENV CUDA_CUBLAS ${CUDA_CUBLAS}
-
-LABEL com.nvidia.volumes.needed="nvidia_driver"
-
-RUN set -xe \
-	&& buildDeps=" \
-        software-properties-common \
-        python-software-properties \
-	" \
-    && apt-get update && apt-get install --no-install-recommends --no-install-suggests -y $buildDeps \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN apt-get update -y && \
-apt-get install -y expect && \
-printf "\
-set timeout -1\n\
-spawn apt-get install -y keyboard-configuration\n\
-expect {\n\
-    \"\\\\\\\\\[More\\\\\\\\\]\" { send \"\\\n\"; exp_continue; }\n\
-    \"Country of origin for the keyboard: \" { send \"36\\\n\"; }\n\
-}\n\
-expect {\n\
-    \"\\\\\\\\\[More\\\\\\\\\]\" { send \"\\\n\"; exp_continue; }\n\
-    \"Keyboard layout: \" { send \"1\\\n\" }\n\
-}\n\
-expect eof\n\
-" | expect
-
-RUN add-apt-repository ppa:graphics-drivers/ppa \
-    && apt-get update \
-    && apt-get install -y -f nvidia-384
+ENV NVIDIA_CUDA_VERSION ${CUDA_VERSION}
 
 RUN NVIDIA_GPGKEY_SUM=d1be581509378368edeec8c1eb2958702feedf3bc3d17011adbf24efacce4ab5 && \
     NVIDIA_GPGKEY_FPR=ae09fe4bbd223a84b2ccfce3f60f4b3d7fa2af80 && \
@@ -66,11 +37,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN echo "/usr/local/cuda/lib64" >> /etc/ld.so.conf.d/cuda.conf && \
     ldconfig
 
+# nvidia-docker 1.0
+LABEL com.nvidia.volumes.needed="nvidia_driver"
+
 RUN echo "/usr/local/nvidia/lib" >> /etc/ld.so.conf.d/nvidia.conf && \
     echo "/usr/local/nvidia/lib64" >> /etc/ld.so.conf.d/nvidia.conf
 
 ENV PATH /usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
 ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64
+
+# nvidia-container-runtime
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         cuda-core-$CUDA_PKG_VERSION \

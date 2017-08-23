@@ -6,15 +6,13 @@ RUN pip install -r /tmp/requirements.txt \
     && rm /tmp/requirements.txt
 
 # install and configure theano
-RUN conda install theano \
+RUN pip install theano \
     && echo "[global] \
             device = cuda \
             floatX = float32 \
             \
             [cuda] \
             root = /usr/local/cuda" > ~/.theanorc
-
-RUN conda install -c conda-forge tensorflow
 
 # install and configure keras
 RUN pip install keras \
@@ -23,5 +21,5 @@ RUN pip install keras \
     "image_dim_ordering": "th", \
     "epsilon": 1e-07, \
     "floatx": "float32", \
-    "backend": "tensorflow" \
+    "backend": "theano" \
     }' > ~/.keras/keras.json
