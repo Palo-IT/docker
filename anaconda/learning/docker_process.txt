@@ -8,7 +8,7 @@ RUN pip install -r /tmp/requirements.txt \
 # install and configure theano
 RUN conda install theano \
     && echo "[global] \
-            device = gpu \
+            device = cuda \
             floatX = float32 \
             \
             [cuda] \
