@@ -71,9 +71,12 @@ ANACONDA VERSION
         - ZODB
         - gensim
         - elasticsearch
+        - lasagne
+        - pika
         - psycopg2
-        - theano
-        - keras
+        - pdf2text
+        - langdetect
+        - pattern
 
 - COMMANDS:
 

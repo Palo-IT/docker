@@ -2,4 +2,9 @@ ZEO
 ZODB
 gensim
 elasticsearch
+lasagne
+pika
 psycopg2
+pdf2text
+langdetect
+pattern
