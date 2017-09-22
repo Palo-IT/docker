@@ -6,13 +6,15 @@ RUN pip install -r /tmp/requirements.txt \
     && rm /tmp/requirements.txt
 
 # install and configure theano
-RUN pip install theano \
+RUN conda install theano \
     && echo "[global] \
             device = cuda \
             floatX = float32 \
             \
             [cuda] \
             root = /usr/local/cuda" > ~/.theanorc
+
+RUN conda install -c conda-forge tensorflow
 
 # install and configure keras
 RUN pip install keras \

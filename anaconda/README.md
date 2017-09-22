@@ -74,6 +74,7 @@ ANACONDA VERSION
         - lasagne
         - pika
         - psycopg2
+        - tensorflow
         - pdf2text
         - langdetect
         - pattern
