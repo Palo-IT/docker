@@ -169,11 +169,7 @@ server {
                 {{ $containerNetwork := index $container.Networks 0 }}
                 {{ $port := coalesce $container.Env.VIRTUAL_PORT "80" }}
                 {{ $containerAddress := where $container.Addresses "Port" $port | first }}
-                {{ if $container.Env.VIRTUAL_PORT }}
-                proxy_pass {{ trim $proto }}://{{ $containerNetwork.Gateway }}:{{ $container.Env.VIRTUAL_PORT }};
-                {{ else }}
                 proxy_pass {{ trim $proto }}://{{ $containerNetwork.Gateway }}:{{ $containerAddress.HostPort }};
-                {{ end }}
             {{ else }}
                 {{ $containerNetwork := index $container.Networks 0 }}
                 {{ $containerAddress := index $container.Addresses 0 }}
@@ -226,11 +222,7 @@ server {
                 {{ $containerNetwork := index $container.Networks 0 }}
                 {{ $port := coalesce $container.Env.VIRTUAL_PORT "80" }}
                 {{ $containerAddress := where $container.Addresses "Port" $port | first }}
-                {{ if $container.Env.VIRTUAL_PORT }}
-                proxy_pass {{ trim $proto }}://{{ $containerNetwork.Gateway }}:{{ $container.Env.VIRTUAL_PORT }};
-                {{ else }}
                 proxy_pass {{ trim $proto }}://{{ $containerNetwork.Gateway }}:{{ $containerAddress.HostPort }};
-                {{ end }}
             {{ else }}
                 {{ $containerNetwork := index $container.Networks 0 }}
                 {{ $containerAddress := index $container.Addresses 0 }}
